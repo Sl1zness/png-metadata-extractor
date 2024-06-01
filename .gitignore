@@ -25,4 +25,7 @@ dist-ssr
 
 #c
 *.exe
+./extractor/results
+./extractor/results/*.json
 
+./backend/results

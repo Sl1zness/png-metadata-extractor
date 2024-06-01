@@ -4,7 +4,7 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "nm": "yarn nodemon server.js"
+    "nm": "nodemon --watch server.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.2"

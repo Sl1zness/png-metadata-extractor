@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <sys/stat.h>
 
 // CONSTS
 #define BYTES_READING_WINDOW 4
 #define SIGNATURE_BYTES 8
 #define RESULTS_FILENAME_SIZE 12
-#define RESULTS_FILE_PATH "./testImages/results/"
+#define RESULTS_FILE_PATH "./results/"
 
 // ERRORS
 #define NO_FILE_PROVIDED_ERROR 1
@@ -25,6 +26,7 @@ typedef struct {
 // TODO: add custom chunks handler
 // TODO: handle fputs possible errors and possible chunk reading errors
 // TODO: create results dir using mkdir + handle possible errors
+// TODO: node js child_process uses paths relative to the server => fix RESULTS_FILE_PATH
 
 PngChunk* readChunk(FILE* image);
 long int unCharToLI(unsigned char* num);
@@ -50,6 +52,12 @@ int main(int argc, const char *argv[]) {
     if (strcmp(signature, "\211PNG\r\n\032\n") != 0) {
         fprintf(stderr, "ERR: File %s is not a PNG file. Wrong signature", imagePath);
         exit(WRONG_FILE_TYPE_ERROR);
+    }
+
+    // Check whether results dir exists or not
+    struct stat st;
+    if (stat(RESULTS_FILE_PATH, &st) != 0) {
+        mkdir(RESULTS_FILE_PATH);
     }
 
     srand(time(NULL));
@@ -88,6 +96,8 @@ int main(int argc, const char *argv[]) {
 
     fclose(result);
     fclose(image);
+
+    printf("%s", resultsFileName);
 
     return 0;
 }
